@@ -1,8 +1,0 @@
-✅ Admin users created successfully.
-+--------------------+---------------------------+------------+--------------+
-| Name               | Email                     | Role       | Password     |
-+--------------------+---------------------------+------------+--------------+
-| Butcherhut Admin   | admin@butcherhut.ng       | owner      | Admin@1234   |
-| Site Administrator | siteadmin@butcherhut.ng   | site-admin | SiteAdmin@1234 |
-+--------------------+---------------------------+------------+--------------+
-⚠️  Change these passwords immediately after first login!

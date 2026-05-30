@@ -1,1 +1,0 @@
-<p class="text-xs text-gray-400 px-2">Navigation coming soon</p>
