@@ -1,0 +1,95 @@
+UPDATED STRUCTURE OF BUTCHERHUT-ERP APPLICATION (as of April 25, 2026)
+
+================================================================================
+
+NEWLY ADDED/CHANGED SINCE LAST STRUCTURE:
+-----------------------------------------
+- **app/Models**: Added models for Attendance, Customer, CustomerDebt, Department, Expense, Invoice, InvoiceItem, KitchenOrder, LeaveRequest, OnlineOrder, Payroll, Project, ProjectItem, StaffProfile.
+- **app/Http/Controllers/Manager**: Now contains DashboardController.php and ExpenseController.php.
+- **database/migrations**: New migration files for all new models, plus new columns for existing tables (e.g., branding for shops, department_id for kitchen_orders).
+- **routes/manager.php**: Expanded with routes for expenses, invoices, refunds, till, and POS operations.
+
+CURRENT DIRECTORY STRUCTURE (KEY AREAS):
+----------------------------------------
+/ (Root)
+├── .editorconfig
+├── .env & .env.example
+├── .gitignore
+├── artisan
+├── composer.json & composer.lock
+├── package.json & package-lock.json
+├── phpunit.xml
+├── postcss.config.js
+├── tailwind.config.js
+├── vite.config.js
+├── README.md
+├── user_log.txt
+├── structure.txt
+├── updated-structure.txt (this file)
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── Controller.php
+│   │   │   ├── ProfileController.php
+│   │   │   ├── Auth/
+│   │   │   ├── Admin/
+│   │   │   ├── Owner/
+│   │   │   ├── Manager/
+│   │   │   │   ├── DashboardController.php
+│   │   │   │   └── ExpenseController.php
+│   │   │   ├── HR/
+│   │   │   ├── Cashier/
+│   │   │   ├── POS/
+│   │   │   └── Supervisor/
+│   │   ├── Middleware/
+│   │   └── Requests/
+│   ├── Models/
+│   │   ├── Attendance.php
+│   │   ├── Category.php
+│   │   ├── Customer.php
+│   │   ├── CustomerDebt.php
+│   │   ├── Department.php
+│   │   ├── Expense.php
+│   │   ├── Invoice.php
+│   │   ├── InvoiceItem.php
+│   │   ├── KitchenOrder.php
+│   │   ├── LeaveRequest.php
+│   │   ├── OnlineOrder.php
+│   │   ├── Payroll.php
+│   │   ├── Product.php
+│   │   ├── Project.php
+│   │   ├── ProjectItem.php
+│   │   ├── RefundRequest.php
+│   │   ├── Sale.php
+│   │   ├── SaleItem.php
+│   │   ├── Shop.php
+│   │   ├── StaffProfile.php
+│   │   ├── StockMovement.php
+│   │   ├── TillSession.php
+│   │   └── User.php
+│   ├── Providers/
+│   ├── Services/
+│   ├── Traits/
+│   └── View/Components/
+├── bootstrap/
+├── config/
+├── database/
+│   ├── migrations/ (see new migration files for new models)
+│   ├── factories/
+│   └── seeders/
+├── public/
+├── resources/
+├── routes/
+│   ├── manager.php (now includes routes for expenses, invoices, refunds, till, POS)
+│   └── ... (other route files)
+├── storage/
+├── tests/
+├── vendor/
+
+NOTES ON RECENT CHANGES:
+------------------------
+- The application has expanded to support HR, payroll, project management, customer debt tracking, staff attendance, and expense management.
+- The manager role now has access to expense approval, invoice management, and refund processing.
+- Database schema has grown to support all new business entities.
+
+For a full breakdown of any folder or file, or to see the contents of a specific file, please ask!

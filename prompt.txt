@@ -1,0 +1,219 @@
+C:\xampp\htdocs\BucherMarket\butcherhut-erp>php artisan route:list 2>&1 | grep -E "owner\.|cashier\.|pos\.|supervisor\." | grep -v 
+"vendor"
+  GET|HEAD        cashier/dashboard ....................................... cashier.dashboard › Cashier\DashboardController@index
+  GET|HEAD        cashier/invoices ....................................... cashier.invoices.index › Owner\InvoiceController@index
+  POST            cashier/invoices ....................................... cashier.invoices.store › Owner\InvoiceController@store
+  GET|HEAD        cashier/invoices/create .............................. cashier.invoices.create › Owner\InvoiceController@create
+  GET|HEAD        cashier/invoices/{invoice} ............................... cashier.invoices.show › Owner\InvoiceController@show
+  POST            cashier/invoices/{invoice}/mark-sent ............ cashier.invoices.mark-sent › Owner\InvoiceController@markSent
+  POST            cashier/invoices/{invoice}/payment ........... cashier.invoices.payment › Owner\InvoiceController@recordPayment
+  GET|HEAD        cashier/invoices/{invoice}/pdf ............................. cashier.invoices.pdf › Owner\InvoiceController@pdf
+  GET|HEAD        cashier/invoices/{invoice}/thermal ................. cashier.invoices.thermal › Owner\InvoiceController@thermal
+  GET|HEAD        cashier/receipt/{sale} ........................................... cashier.receipt › POS\SaleController@receipt
+  GET|HEAD        cashier/refunds ........................................ cashier.refunds.index › Cashier\RefundController@index
+  POST            cashier/refunds ........................................ cashier.refunds.store › Cashier\RefundController@store
+  GET|HEAD        cashier/refunds/create/{sale} ........................ cashier.refunds.create › Cashier\RefundController@create
+  POST            cashier/sale .................................................... cashier.sale.store › POS\SaleController@store
+  GET|HEAD        cashier/sell ........................................................... cashier.sell › POS\POSController@index
+  GET|HEAD        cashier/till ......................................... cashier.till.index › Cashier\TillSessionController@index
+  GET|HEAD        cashier/till/close .......................... cashier.till.close.form › Cashier\TillSessionController@closeForm
+  POST            cashier/till/close ................................... cashier.till.close › Cashier\TillSessionController@close
+  POST            cashier/till/open ...................................... cashier.till.open › Cashier\TillSessionController@open
+  POST            cashier/till/{tillSession}/approve ............... cashier.till.approve › Cashier\TillSessionController@approve
+  GET|HEAD        cashier/till/{tillSession}/reconcile ......... cashier.till.reconcile › Cashier\TillSessionController@reconcile
+  GET|HEAD        owner/categories ...................................... owner.categories.index › Owner\CategoryController@index
+  POST            owner/categories ...................................... owner.categories.store › Owner\CategoryController@store
+  GET|HEAD        owner/categories/create ............................. owner.categories.create › Owner\CategoryController@create
+  PUT|PATCH       owner/categories/{category} ......................... owner.categories.update › Owner\CategoryController@update
+  DELETE          owner/categories/{category} ....................... owner.categories.destroy › Owner\CategoryController@destroy
+  GET|HEAD        owner/categories/{category}/edit ........................ owner.categories.edit › Owner\CategoryController@edit
+  GET|HEAD        owner/dashboard ............................................. owner.dashboard › Owner\DashboardController@index
+  GET|HEAD        owner/departments .................................. owner.departments.index › Owner\DepartmentController@index
+  POST            owner/departments .................................. owner.departments.store › Owner\DepartmentController@store
+  PUT             owner/departments/{department} ................... owner.departments.update › Owner\DepartmentController@update
+  DELETE          owner/departments/{department} ................. owner.departments.destroy › Owner\DepartmentController@destroy
+  PATCH           owner/departments/{department}/toggle ............ owner.departments.toggle › Owner\DepartmentController@toggle
+  GET|HEAD        owner/invoices ........................................... owner.invoices.index › Owner\InvoiceController@index
+  POST            owner/invoices ........................................... owner.invoices.store › Owner\InvoiceController@store
+  GET|HEAD        owner/invoices/create .................................. owner.invoices.create › Owner\InvoiceController@create
+  POST            owner/invoices/from-sale/{sale} ................... owner.invoices.from-sale › Owner\InvoiceController@fromSale
+  GET|HEAD        owner/invoices/{invoice} ................................... owner.invoices.show › Owner\InvoiceController@show
+  DELETE          owner/invoices/{invoice} ............................. owner.invoices.destroy › Owner\InvoiceController@destroy
+  POST            owner/invoices/{invoice}/mark-sent ................ owner.invoices.mark-sent › Owner\InvoiceController@markSent
+  POST            owner/invoices/{invoice}/payment ............... owner.invoices.payment › Owner\InvoiceController@recordPayment
+  GET|HEAD        owner/invoices/{invoice}/pdf ................................. owner.invoices.pdf › Owner\InvoiceController@pdf
+  GET|HEAD        owner/invoices/{invoice}/thermal ..................... owner.invoices.thermal › Owner\InvoiceController@thermal
+  GET|HEAD        owner/products ........................................... owner.products.index › Owner\ProductController@index
+  POST            owner/products ........................................... owner.products.store › Owner\ProductController@store
+  GET|HEAD        owner/products/create .................................. owner.products.create › Owner\ProductController@create
+  PUT|PATCH       owner/products/{product} ............................... owner.products.update › Owner\ProductController@update
+  DELETE          owner/products/{product} ............................. owner.products.destroy › Owner\ProductController@destroy
+  GET|HEAD        owner/products/{product}/edit .............................. owner.products.edit › Owner\ProductController@edit
+  PATCH           owner/products/{product}/toggle ........................ owner.products.toggle › Owner\ProductController@toggle
+  GET|HEAD        owner/settings ........................................ owner.settings.edit › Owner\ShopSettingsController@edit
+  POST            owner/settings .................................... owner.settings.update › Owner\ShopSettingsController@update
+  GET|HEAD        owner/shops .................................................... owner.shops.index › Owner\ShopController@index
+  POST            owner/shops .................................................... owner.shops.store › Owner\ShopController@store
+  GET|HEAD        owner/shops-overview ............................... owner.shops.overview › Owner\ShopSwitchController@overview
+  POST            owner/shops/clear-context ......................... owner.shops.clear › Owner\ShopSwitchController@clearContext
+  GET|HEAD        owner/shops/create ........................................... owner.shops.create › Owner\ShopController@create
+  GET|HEAD        owner/shops/{shop} ............................................... owner.shops.show › Owner\ShopController@show
+  PUT|PATCH       owner/shops/{shop} ........................................... owner.shops.update › Owner\ShopController@update
+  DELETE          owner/shops/{shop} ......................................... owner.shops.destroy › Owner\ShopController@destroy
+  GET|HEAD        owner/shops/{shop}/edit .......................................... owner.shops.edit › Owner\ShopController@edit
+  GET|HEAD        owner/shops/{shop}/manage ................................ owner.shops.manage › Owner\ShopSwitchController@show
+  POST            owner/shops/{shop}/switch .............................. owner.shops.switch › Owner\ShopSwitchController@switch
+  PATCH           owner/shops/{shop}/toggle .................................... owner.shops.toggle › Owner\ShopController@toggle
+  GET|HEAD        owner/stock ................................................... owner.stock.index › Owner\StockController@index
+  POST            owner/stock/adjust .......................................... owner.stock.adjust › Owner\StockController@adjust
+  GET|HEAD        owner/stock/{product}/history ............................. owner.stock.history › Owner\StockController@history
+  GET|HEAD        owner/users .................................................... owner.users.index › Owner\UserController@index
+  POST            owner/users .................................................... owner.users.store › Owner\UserController@store
+  GET|HEAD        owner/users/create ........................................... owner.users.create › Owner\UserController@create
+  PUT|PATCH       owner/users/{user} ........................................... owner.users.update › Owner\UserController@update
+  GET|HEAD        owner/users/{user}/edit .......................................... owner.users.edit › Owner\UserController@edit
+  PATCH           owner/users/{user}/restore ................................. owner.users.restore › Owner\UserController@restore
+  PATCH           owner/users/{user}/suspend ................................. owner.users.suspend › Owner\UserController@suspend
+  GET|HEAD        pos/dashboard ................................................... pos.dashboard › POS\DashboardController@index
+  GET|HEAD        pos/invoices ............................................... pos.invoices.index › Owner\InvoiceController@index
+  POST            pos/invoices ............................................... pos.invoices.store › Owner\InvoiceController@store
+  GET|HEAD        pos/invoices/create ...................................... pos.invoices.create › Owner\InvoiceController@create
+  GET|HEAD        pos/invoices/{invoice} ....................................... pos.invoices.show › Owner\InvoiceController@show
+  POST            pos/invoices/{invoice}/mark-sent .................... pos.invoices.mark-sent › Owner\InvoiceController@markSent
+  POST            pos/invoices/{invoice}/payment ................... pos.invoices.payment › Owner\InvoiceController@recordPayment
+  GET|HEAD        pos/invoices/{invoice}/pdf ..................................... pos.invoices.pdf › Owner\InvoiceController@pdf
+  GET|HEAD        pos/invoices/{invoice}/thermal ......................... pos.invoices.thermal › Owner\InvoiceController@thermal
+  GET|HEAD        pos/receipt/{sale} ................................................... pos.receipt › POS\SaleController@receipt
+  POST            pos/sale ............................................................ pos.sale.store › POS\SaleController@store
+  GET|HEAD        pos/sell ................................................................... pos.sell › POS\POSController@index
+  GET|HEAD        supervisor/dashboard .............................. supervisor.dashboard › Supervisor\DashboardController@index
+  GET|HEAD        supervisor/refunds ............................... supervisor.refunds.index › Supervisor\RefundController@index
+  POST            supervisor/refunds/{refundRequest}/approve ... supervisor.refunds.approve › Supervisor\RefundController@approve
+  POST            supervisor/refunds/{refundRequest}/reject ...... supervisor.refunds.reject › Supervisor\RefundController@reject
+
+C:\xampp\htdocs\BucherMarket\butcherhut-erp>php artisan tinker
+Psy Shell v0.12.22 (PHP 8.2.12 — cli) by Justin Hileman
+New PHP manual is available (latest: 3.0.1). Update with `doc --update-manual`
+
+> // Full system check                                                                                                             
+
+> $checks = [                                                                                                                      
+.     'Users'          => App\Models\User::count(),                                                                                
+.     'Shops'          => App\Models\Shop::count(),                                                                                
+.     'Products'       => App\Models\Product::count(),                                                                             
+.     'Categories'     => App\Models\Category::count(),                                                                            
+.     'Departments'    => App\Models\Department::count(),                                                                          
+.     'TillSessions'   => App\Models\TillSession::count(),                                                                         
+.     'Sales'          => App\Models\Sale::count(),                                                                                
+.     'SaleItems'      => App\Models\SaleItem::count(),                                                                            
+.     'StockMovements' => App\Models\StockMovement::count(),                                                                       
+.     'RefundRequests' => App\Models\RefundRequest::count(),                                                                       
+.     'Invoices'       => App\Models\Invoice::count(),                                                                             
+.     'InvoiceItems'   => App\Models\InvoiceItem::count(),                                                                         
+.     'Customers'      => App\Models\Customer::count(),                                                                            
+.     'CustomerDebts'  => App\Models\CustomerDebt::count(),                                                                        
+.     'Expenses'       => App\Models\Expense::count(),                                                                             
+. ];                                                                                                                               
+
+   Illuminate\Database\QueryException  SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: butcherhut_erp, SQL: select count(*) as aggregate from `users`).
+
+> foreach($checks as $name => $count) {                                                                                            
+.     echo str_pad($name, 16) . ': ' . $count . PHP_EOL;                                                                           
+. }                                                                                                                                
+
+   WARNING  Undefined variable $checks.
+   WARNING  foreach() argument must be of type array|object, null given.
+
+> echo PHP_EOL . 'System OK' . PHP_EOL;                                                                                            
+
+
+System OK
+
+> // Full system check                                                                                                             
+
+> $checks = [                                                                                                                      
+.     'Users'          => App\Models\User::count(),                                                                                
+.     'Shops'          => App\Models\Shop::count(),                                                                                
+.     'Products'       => App\Models\Product::count(),                                                                             
+.     'Categories'     => App\Models\Category::count(),                                                                            
+.     'Departments'    => App\Models\Department::count(),                                                                          
+.     'TillSessions'   => App\Models\TillSession::count(),                                                                         
+.     'Sales'          => App\Models\Sale::count(),                                                                                
+.     'SaleItems'      => App\Models\SaleItem::count(),                                                                            
+.     'StockMovements' => App\Models\StockMovement::count(),                                                                       
+.     'RefundRequests' => App\Models\RefundRequest::count(),                                                                       
+.     'Invoices'       => App\Models\Invoice::count(),                                                                             
+.     'InvoiceItems'   => App\Models\InvoiceItem::count(),                                                                         
+.     'Customers'      => App\Models\Customer::count(),                                                                            
+.     'CustomerDebts'  => App\Models\CustomerDebt::count(),                                                                        
+.     'Expenses'       => App\Models\Expense::count(),                                                                             
+. ];                                                                                                                               
+
+= [
+    "Users" => 7,
+    "Shops" => 4,
+    "Products" => 2,
+    "Categories" => 3,
+    "Departments" => 1,
+    "TillSessions" => 2,
+    "Sales" => 5,
+    "SaleItems" => 5,
+    "StockMovements" => 8,
+    "RefundRequests" => 1,
+    "Invoices" => 1,
+    "InvoiceItems" => 2,
+    "Customers" => 0,
+    "CustomerDebts" => 0,
+    "Expenses" => 0,
+  ]
+
+> foreach($checks as $name => $count) {                                                                                            
+.     echo str_pad($name, 16) . ': ' . $count . PHP_EOL;                                                                           
+. }                                                                                                                                
+
+Users           : 7
+Shops           : 4
+Products        : 2
+Categories      : 3
+Departments     : 1
+TillSessions    : 2
+Sales           : 5
+SaleItems       : 5
+StockMovements  : 8
+RefundRequests  : 1
+Invoices        : 1
+InvoiceItems    : 2
+Customers       : 0
+CustomerDebts   : 0
+Expenses        : 0
+
+> echo PHP_EOL . 'System OK' . PHP_EOL;                                                                                            
+
+
+System OK
+
+>                                                                                                                                  
+> $checks = ['Users'=>App\Models\User::count(),'Shops'=>App\Models\Shop::count(),'Sales'=>App\Models\Sale::count(),'Invoices'=>App\Models\Invoice::count(),'Expenses'=>App\Models\Expense::count()];                                                                  
+
+= [
+    "Users" => 7,
+    "Shops" => 4,
+    "Sales" => 5,
+    "Invoices" => 1,
+    "Expenses" => 0,
+  ]
+
+> foreach($checks as $k=>$v) echo str_pad($k,12).': '.$v.PHP_EOL;                                                                  
+
+Users       : 7
+Shops       : 4
+Sales       : 5
+Invoices    : 1
+Expenses    : 0
+
+> exit                                                                                                                             
+
+   INFO  Goodbye.
+
+
+C:\xampp\htdocs\BucherMarket\butcherhut-erp>

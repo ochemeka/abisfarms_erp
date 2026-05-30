@@ -1,0 +1,25 @@
+{
+  "worktrees": {
+    "wt-1779442629130-1": {
+      "branch": "deserted-swordtail",
+      "path": "c:\\xampp\\htdocs\\abisfarms\\abisfarms\\.kilo\\worktrees\\deserted-swordtail",
+      "parentBranch": "main",
+      "createdAt": "2026-05-22T09:37:09.130Z",
+      "remote": "origin"
+    }
+  },
+  "sessions": {
+    "ses_1b0f44408ffedsmY5iQswzUH0Z": {
+      "worktreeId": "wt-1779442629130-1",
+      "createdAt": "2026-05-22T09:37:09.623Z"
+    }
+  },
+  "tabOrder": {
+    "local": [
+      "pending:1"
+    ]
+  },
+  "worktreeOrder": [
+    "wt-1779442629130-1"
+  ]
+}

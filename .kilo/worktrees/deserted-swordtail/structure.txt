@@ -1,0 +1,707 @@
+DETAILED STRUCTURE OF BUTCHERHUT-ERP APPLICATION
+
+================================================================================
+
+OVERVIEW
+--------
+This is a Laravel-based Enterprise Resource Planning (ERP) system designed for butcher shops, markets, restaurants, and hybrid businesses. It features multi-tenancy with shop-based scoping, role-based access control, and comprehensive inventory, sales, HR, and user management capabilities.
+
+TECHNOLOGY STACK
+----------------
+- Framework: Laravel 12.0
+- PHP Version: 8.2+
+- Frontend: Blade Templates, Tailwind CSS, Vite.js
+- Database: SQLite (development), configurable for MySQL/PostgreSQL
+- Authentication: Laravel Breeze
+- Authorization: Spatie Laravel Permission
+- Activity Logging: Spatie Laravel Activity Log
+- PDF Generation: DomPDF
+- Testing: PHPUnit
+- Development Tools: Laravel Sail, Pint, Collision
+
+ARCHITECTURE
+------------
+The application follows a standard Laravel MVC (Model-View-Controller) architecture with additional layers for multi-tenancy and role-based access control.
+
+MULTI-TENANCY & SCOPING
+-----------------------
+- Shops serve as tenants with users belonging to specific shops
+- BelongsToShop trait auto-scopes queries to user's active shop
+- User scopes: 'branch' (sees only their shop), 'regional'/'all' (broader access)
+- Session-based active shop selection for users with multiple shop access
+
+USER ROLES & PERMISSIONS
+------------------------
+Hierarchical role structure with middleware enforcement:
+1. site-admin: System-wide administration
+2. owner: Shop owner with full shop management access
+3. manager: Managerial oversight (can access owner/manager routes)
+4. hr: Human resources management (can access hr/owner/manager routes)
+5. supervisor: Supervisory role
+6. cashier: Point-of-sale operations
+7. pos: Basic POS access
+
+DIRECTORY STRUCTURE
+-------------------
+
+/ (Root)
+├── .editorconfig
+├── .env & .env.example
+├── .gitignore
+├── artisan (Laravel CLI)
+├── composer.json & composer.lock
+├── package.json & package-lock.json
+├── phpunit.xml
+├── postcss.config.js
+├── tailwind.config.js
+├── vite.config.js
+├── README.md
+├── user_log.txt
+├── structure.txt
+├── updated-structure.txt
+├── prompt.txt
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── Controller.php (Base controller)
+│   │   │   ├── ProfileController.php
+│   │   │   ├── Auth/ (Authentication controllers)
+│   │   │   ├── Admin/ (Site admin controllers)
+│   │   │   │   └── DashboardController.php
+│   │   │   ├── Owner/ (Shop owner controllers)
+│   │   │   │   ├── CategoryController.php
+│   │   │   │   ├── DashboardController.php
+│   │   │   │   ├── DepartmentController.php
+│   │   │   │   ├── ExpenseController.php
+│   │   │   │   ├── InvoiceController.php
+│   │   │   │   ├── ProductController.php
+│   │   │   │   ├── ShopController.php
+│   │   │   │   ├── ShopSettingsController.php
+│   │   │   │   ├── ShopSwitchController.php
+│   │   │   │   ├── StockController.php
+│   │   │   │   └── UserController.php
+│   │   │   ├── Manager/
+│   │   │   │   ├── DashboardController.php
+│   │   │   │   └── ExpenseController.php
+│   │   │   ├── HR/
+│   │   │   │   └── DashboardController.php
+│   │   │   ├── Supervisor/
+│   │   │   │   ├── DashboardController.php
+│   │   │   │   └── RefundController.php
+│   │   │   ├── Cashier/
+│   │   │   │   ├── DashboardController.php
+│   │   │   │   ├── RefundController.php
+│   │   │   │   └── TillSessionController.php
+│   │   │   └── POS/
+│   │   │       ├── DashboardController.php
+│   │   │       ├── POSController.php
+│   │   │       └── SaleController.php
+│   │   ├── Middleware/
+│   │   │   └── EnsureUserIsActive.php
+│   │   └── Requests/
+│   │       ├── Auth/
+│   │       ├── Owner/
+│   │       └── ProfileUpdateRequest.php
+│   ├── Models/ (Eloquent models)
+│   │   ├── User.php
+│   │   ├── Shop.php
+│   │   ├── Category.php
+│   │   ├── Product.php
+│   │   ├── Sale.php
+│   │   ├── SaleItem.php
+│   │   ├── TillSession.php
+│   │   ├── StockMovement.php
+│   │   ├── RefundRequest.php
+│   │   ├── KitchenOrder.php
+│   │   ├── Attendance.php
+│   │   ├── Customer.php
+│   │   ├── CustomerDebt.php
+│   │   ├── Department.php
+│   │   ├── Expense.php
+│   │   ├── Invoice.php
+│   │   ├── InvoiceItem.php
+│   │   ├── LeaveRequest.php
+│   │   ├── OnlineOrder.php
+│   │   ├── Payroll.php
+│   │   ├── Project.php
+│   │   ├── ProjectItem.php
+│   │   └── StaffProfile.php
+│   ├── Traits/
+│   │   └── BelongsToShop.php
+│   ├── Providers/
+│   │   └── AppServiceProvider.php
+│   └── View/
+│       └── Components/
+│           ├── AppLayout.php
+│           └── GuestLayout.php
+├── bootstrap/
+│   ├── app.php
+│   ├── providers.php
+│   └── cache/
+├── config/
+│   ├── app.php
+│   ├── auth.php
+│   ├── cache.php
+│   ├── database.php
+│   ├── dompdf.php
+│   ├── filesystems.php
+│   ├── logging.php
+│   ├── mail.php
+│   ├── permission.php
+│   ├── queue.php
+│   ├── services.php
+│   └── session.php
+├── database/
+│   ├── database.sqlite
+│   ├── factories/
+│   │   └── UserFactory.php
+│   ├── migrations/
+│   │   ├── 0001_01_01_000000_create_users_table.php
+│   │   ├── 0001_01_01_000001_create_cache_table.php
+│   │   ├── 0001_01_01_000002_create_jobs_table.php
+│   │   ├── 2026_04_16_160718_create_permission_tables.php
+│   │   ├── 2026_04_16_160733_create_activity_log_table.php
+│   │   └── ... (additional migrations)
+│   └── seeders/
+├── public/
+│   ├── index.php
+│   ├── robots.txt
+│   └── build/ (Compiled assets)
+├── resources/
+│   ├── css/
+│   ├── js/
+│   └── views/
+├── routes/
+│   ├── admin.php
+│   ├── auth.php
+│   ├── cashier.php
+│   ├── console.php
+│   ├── hr.php
+│   ├── manager.php
+│   ├── owner.php
+│   ├── owner.txt
+│   ├── pos.php
+│   ├── supervisor.php
+│   └── web.php
+├── storage/
+├── tests/
+│   ├── TestCase.php
+│   ├── Feature/
+│   └── Unit/
+└── vendor/
+
+KEY MODELS & RELATIONSHIPS
+--------------------------
+
+Shop Model:
+- Fields: name, type (restaurant/market/butchery/hybrid), address, city, phone, email, is_active, manager_id, settings
+- Relationships:
+  - belongsTo: manager (User)
+  - hasMany: users, products, categories, sales
+
+User Model:
+- Fields: name, email, password, phone, shop_id, is_active, scope, last_login_at
+- Traits: HasRoles, LogsActivity
+- Relationships:
+  - belongsTo: shop
+  - hasMany: staffProfiles, tillSessions
+
+Product Model:
+- Fields: shop_id, category_id, name, sku, price, cost_price, stock_quantity, low_stock_threshold, unit, image, is_active, track_stock
+- Traits: BelongsToShop, SoftDeletes, LogsActivity
+- Relationships:
+  - belongsTo: category, shop
+  - hasMany: saleItems, stockMovements
+
+Category Model:
+- Fields: shop_id, name, description, is_active
+- Traits: BelongsToShop
+- Relationships:
+  - belongsTo: shop
+  - hasMany: products
+
+Sale Model:
+- Fields: shop_id, till_session_id, customer_id, total_amount, payment_method, status, notes
+- Traits: BelongsToShop, SoftDeletes
+- Relationships:
+  - belongsTo: shop, tillSession, customer
+  - hasMany: saleItems
+
+SaleItem Model:
+- Fields: sale_id, product_id, quantity, unit_price, subtotal
+- Relationships:
+  - belongsTo: sale, product
+
+TillSession Model:
+- Fields: shop_id, user_id, opening_balance, closing_balance, expected_balance, status, started_at, ended_at
+- Traits: BelongsToShop
+- Relationships:
+  - belongsTo: shop, user (cashier)
+  - hasMany: sales
+
+StockMovement Model:
+- Fields: shop_id, product_id, quantity, type (in/out/adjustment), reason, reference, user_id
+- Traits: BelongsToShop
+- Relationships:
+  - belongsTo: shop, product, user
+
+RefundRequest Model:
+- Fields: shop_id, sale_id, amount, reason, status, approved_by, created_at, processed_at
+- Traits: BelongsToShop
+- Relationships:
+  - belongsTo: shop, sale, approver
+
+Customer Model:
+- Fields: shop_id, name, email, phone, address, points, is_active
+- Traits: BelongsToShop
+- Relationships:
+  - belongsTo: shop
+  - hasMany: sales, customerDebts
+
+CustomerDebt Model:
+- Fields: shop_id, customer_id, amount, due_date, status, notes
+- Traits: BelongsToShop
+- Relationships:
+  - belongsTo: shop, customer
+
+Expense Model:
+- Fields: shop_id, category, amount, description, date, user_id, receipt_path
+- Traits: BelongsToShop
+- Relationships:
+  - belongsTo: shop, user
+
+Invoice Model:
+- Fields: shop_id, customer_id, invoice_number, total_amount, status, due_date
+- Traits: BelongsToShop
+- Relationships:
+  - belongsTo: shop, customer
+  - hasMany: invoiceItems
+
+InvoiceItem Model:
+- Fields: invoice_id, description, quantity, unit_price, subtotal
+- Relationships:
+  - belongsTo: invoice
+
+Attendance Model:
+- Fields: user_id, shop_id, date, check_in, check_out, status, notes
+- Traits: BelongsToShop
+- Relationships:
+  - belongsTo: user, shop
+
+LeaveRequest Model:
+- Fields: user_id, shop_id, type, start_date, end_date, reason, status, approved_by
+- Traits: BelongsToShop
+- Relationships:
+  - belongsTo: user, shop, approver
+
+Payroll Model:
+- Fields: shop_id, user_id, period_start, period_end, basic_salary, deductions, bonuses, net_pay, status
+- Traits: BelongsToShop
+- Relationships:
+  - belongsTo: shop, user
+
+StaffProfile Model:
+- Fields: user_id, shop_id, department_id, position, hire_date, salary, emergency_contact
+- Traits: BelongsToShop
+- Relationships:
+  - belongsTo: user, shop, department
+
+Department Model:
+- Fields: shop_id, name, description
+- Traits: BelongsToShop
+- Relationships:
+  - belongsTo: shop
+  - hasMany: staffProfiles
+
+Project Model:
+- Fields: shop_id, name, description, status, start_date, end_date, budget
+- Traits: BelongsToShop
+- Relationships:
+  - belongsTo: shop
+  - hasMany: projectItems
+
+ProjectItem Model:
+- Fields: project_id, product_id, quantity, unit_cost
+- Relationships:
+  - belongsTo: project, product
+
+KitchenOrder Model:
+- Fields: shop_id, sale_id, status, items (JSON), notes
+- Traits: BelongsToShop
+- Relationships:
+  - belongsTo: shop, sale
+
+OnlineOrder Model:
+- Fields: shop_id, customer_id, order_number, status, total_amount, delivery_address, payment_status
+- Traits: BelongsToShop
+- Relationships:
+  - belongsTo: shop, customer
+
+ROUTING STRUCTURE
+-----------------
+Routes are organized by role with middleware enforcement:
+
+web.php (Main entry):
+- Root route to welcome page
+- Auth routes (Breeze)
+- Authenticated routes with role-based prefixes
+
+Role-Specific Route Files:
+- admin.php: Site-wide admin functions
+- owner.php: Shop management (shops, users, categories, products, expenses, stock)
+- manager.php: Managerial oversight
+- hr.php: HR functions (attendance, leave, payroll)
+- cashier.php: POS and till management
+- pos.php: Basic POS operations
+- supervisor.php: Supervisory functions
+
+CONTROLLERS ORGANIZATION
+------------------------
+
+Admin Controllers:
+- DashboardController: Admin dashboard and overview
+
+Owner Controllers:
+- DashboardController: Owner dashboard
+- ShopController: CRUD operations for shops, toggle active status
+- UserController: User CRUD, suspend/restore functionality
+- CategoryController: Category CRUD operations
+- ProductController: Product CRUD, toggle active status
+- DepartmentController: Department management
+- ExpenseController: Expense tracking and management
+- InvoiceController: Invoice generation and management
+- ShopSettingsController: Shop configuration
+- ShopSwitchController: Multi-shop switching
+- StockController: Stock management and movements
+
+Manager Controllers:
+- DashboardController: Manager dashboard
+- ExpenseController: Expense viewing/approval
+
+HR Controllers:
+- DashboardController: HR dashboard
+
+Supervisor Controllers:
+- DashboardController: Supervisor dashboard
+- RefundController: Refund request management
+
+Cashier Controllers:
+- DashboardController: Cashier dashboard
+- TillSessionController: Till session management (open, close, reconcile)
+- RefundController: Refund processing
+
+POS Controllers:
+- DashboardController: POS dashboard
+- POSController: Point of sale interface
+- SaleController: Sales processing
+
+VIEWS & FRONTEND
+----------------
+Blade templates with role-specific layouts:
+
+resources/views/
+├── welcome.blade.php (Public landing)
+├── auth/ (Authentication forms - login, register, password reset)
+├── layouts/
+│   ├── app.blade.php (Main layout)
+│   ├── guest.blade.php
+│   ├── navigation.blade.php
+│   └── sidebars/ (Role-specific sidebars)
+├── admin/
+│   └── dashboard.blade.php
+├── owner/
+│   ├── dashboard.blade.php
+│   ├── shops/ (index, create, edit, show)
+│   ├── users/ (index, create, edit)
+│   ├── categories/ (index, create, edit)
+│   ├── products/ (index, create, edit)
+│   ├── departments/
+│   ├── expenses/
+│   ├── invoices/
+│   └── stock/
+├── manager/
+│   ├── dashboard.blade.php
+│   └── expenses/
+├── hr/
+│   └── dashboard.blade.php
+├── supervisor/
+│   ├── dashboard.blade.php
+│   └── refunds/
+├── cashier/
+│   ├── dashboard.blade.php
+│   ├── till/ (index, open, close, reconcile)
+│   └── refunds/
+├── pos/
+│   ├── dashboard.blade.php
+│   └── sales/
+└── components/ (Reusable Blade components)
+
+DATABASE SCHEMA (Key Tables)
+-----------------------------
+
+Core Tables:
+- users: User accounts with shop_id, role assignments
+- shops: Multi-tenant shops with settings
+- model_has_permissions, model_has_roles, role_has_permissions, roles, permissions: Spatie permission system
+- activity_log: User activity tracking
+
+Business Tables:
+- categories: Product categorization (shop-scoped)
+- products: Inventory items with pricing and stock tracking
+- sales: Transaction records
+- sale_items: Line items for sales
+- till_sessions: Cashier shift management
+- stock_movements: Inventory adjustments
+- refund_requests: Customer refund handling
+- kitchen_orders: Order processing for kitchen
+- customers: Customer information and loyalty
+- customer_debts: Customer debt tracking
+- expenses: Business expense tracking
+- invoices: Invoice generation
+- invoice_items: Invoice line items
+- attendances: Employee attendance records
+- leave_requests: Employee leave management
+- payroll: Employee payroll records
+- staff_profiles: Extended staff information
+- departments: Organizational departments
+- projects: Project tracking
+- project_items: Project-related inventory
+- online_orders: Online order management
+
+KEY FEATURES & WORKFLOWS
+-------------------------
+
+1. Shop Management:
+   - Create/edit shops with types (butchery, market, restaurant, hybrid)
+   - Assign managers to shops
+   - Toggle shop active status
+   - Shop settings configuration
+
+2. User Management:
+   - Role-based user creation and management
+   - User suspension/restoration
+   - Activity logging
+   - Multi-shop access with shop switching
+
+3. Inventory Management:
+   - Category organization
+   - Product CRUD with SKU, pricing, stock levels
+   - Low stock alerts
+   - Stock movement tracking (in/out/adjustments)
+   - Batch/project-based inventory
+
+4. Point of Sale (POS):
+   - Till session management (open/close)
+   - Sales processing with multiple payment methods
+   - Cashier reconciliation
+   - Real-time inventory deduction
+
+5. Sales & Transactions:
+   - Sale recording with items
+   - Refund request handling workflow
+   - Kitchen order processing
+   - Online order management
+
+6. Customer Management:
+   - Customer profiles with loyalty points
+   - Customer debt tracking
+   - Invoice generation
+
+7. HR Management:
+   - Employee attendance tracking
+   - Leave request management
+   - Payroll processing
+   - Staff profiles and departments
+
+8. Financial Management:
+   - Expense tracking by category
+   - Project-based budgeting
+   - Invoice management
+
+9. Reporting & Analytics:
+   - Dashboards per role
+   - Activity logs
+   - Shop-specific data isolation
+
+MULTI-TENANCY IMPLEMENTATION
+-----------------------------
+
+- Shop ID scoping via BelongsToShop trait
+- Global scopes automatically filter data by user's shop
+- Session-based active shop for users with multi-shop access
+- Foreign key constraints maintain data integrity
+- Soft deletes for safe data removal
+
+SECURITY & ACCESS CONTROL
+-------------------------
+
+- Laravel Breeze authentication
+- Spatie Permission for granular access control
+- Role-based middleware on route groups
+- User active status checking (EnsureUserIsActive middleware)
+- Shop-based data isolation
+- Activity logging for audit trails
+
+DEVELOPMENT & DEPLOYMENT
+------------------------
+
+- Composer for dependency management
+- Laravel Sail for Docker development
+- Vite.js for asset compilation
+- Tailwind CSS for styling
+- PHPUnit for testing
+- Laravel Pint for code formatting
+- DomPDF for PDF generation
+
+CONFIGURATION FILES
+-------------------
+
+Key Laravel configuration files in /config:
+- app.php: Application settings
+- auth.php: Authentication config
+- database.php: Database connections
+- dompdf.php: PDF generation settings
+- permission.php: Spatie permissions config
+- session.php: Session management
+- queue.php: Queue configuration
+- cache.php: Cache settings
+- logging.php: Logging configuration
+- mail.php: Email settings
+- filesystems.php: File storage config
+- services.php: Third-party services
+
+This structure provides a comprehensive, scalable ERP solution for butcher shop and market operations with proper separation of concerns, security, role-based access control, and multi-tenancy support.
+
+================================================================================
+- manager.php: Managerial oversight
+- hr.php: HR functions
+- cashier.php: POS and till management
+- pos.php: Basic POS operations
+- supervisor.php: Supervisory functions
+
+CONTROLLERS ORGANIZATION
+------------------------
+Controllers mirror the routing structure:
+
+Owner Controllers:
+- DashboardController
+- ShopController (CRUD + toggle active)
+- UserController (CRUD + suspend/restore)
+- CategoryController (CRUD)
+- ProductController (CRUD + toggle active)
+
+Other Role Controllers:
+- Similar dashboard controllers for each role
+- Cashier: TillSessionController
+- Etc.
+
+VIEWS & FRONTEND
+----------------
+Blade templates with role-specific layouts:
+
+resources/views/
+├── welcome.blade.php (Public landing)
+├── auth/ (Authentication forms)
+├── layouts/
+│   ├── app.blade.php (Main layout)
+│   ├── guest.blade.php
+│   ├── navigation.blade.php
+│   └── sidebars/ (Role-specific sidebars)
+├── admin/dashboard.blade.php
+├── owner/
+│   ├── dashboard.blade.php
+│   ├── shops/ (index, create, edit)
+│   ├── users/ (index, create, edit)
+│   └── inventory/ (categories, products, create, edit)
+├── manager/dashboard.blade.php
+├── hr/dashboard.blade.php
+├── supervisor/dashboard.blade.php
+├── cashier/
+│   ├── dashboard.blade.php
+│   └── till/ (index, close, reconcile)
+├── pos/dashboard.blade.php
+└── components/ (Reusable Blade components)
+
+DATABASE SCHEMA (Key Tables)
+-----------------------------
+
+Core Tables:
+- users: User accounts with shop_id, role assignments
+- shops: Multi-tenant shops with settings
+- model_has_permissions, roles, permissions: Spatie permission system
+- activity_log: User activity tracking
+
+Business Tables:
+- categories: Product categorization (shop-scoped)
+- products: Inventory items with pricing and stock tracking
+- sales: Transaction records
+- sale_items: Line items for sales
+- till_sessions: Cashier shift management
+- stock_movements: Inventory adjustments
+- refund_requests: Customer refund handling
+- kitchen_orders: Order processing for kitchen
+
+KEY FEATURES & WORKFLOWS
+-------------------------
+
+1. Shop Management:
+   - Create/edit shops with types (butchery, market, etc.)
+   - Assign managers to shops
+   - Toggle shop active status
+
+2. User Management:
+   - Role-based user creation and management
+   - User suspension/restoration
+   - Activity logging
+
+3. Inventory Management:
+   - Category organization
+   - Product CRUD with SKU, pricing, stock levels
+   - Low stock alerts
+   - Stock movement tracking
+
+4. Point of Sale (POS):
+   - Till session management
+   - Sales processing
+   - Cashier reconciliation
+
+5. Sales & Transactions:
+   - Sale recording with items
+   - Refund request handling
+   - Kitchen order processing
+
+6. Reporting & Analytics:
+   - Dashboards per role
+   - Activity logs
+   - Shop-specific data isolation
+
+MULTI-TENANCY IMPLEMENTATION
+-----------------------------
+
+- Shop ID scoping via BelongsToShop trait
+- Global scopes automatically filter data by user's shop
+- Session-based active shop for users with multi-shop access
+- Foreign key constraints maintain data integrity
+- Soft deletes for safe data removal
+
+SECURITY & ACCESS CONTROL
+-------------------------
+
+- Laravel Breeze authentication
+- Spatie Permission for granular access control
+- Role-based middleware on route groups
+- User active status checking
+- Shop-based data isolation
+- Activity logging for audit trails
+
+DEVELOPMENT & DEPLOYMENT
+------------------------
+
+- Composer scripts for setup and development
+- Laravel Sail for Docker development
+- Vite.js for asset compilation
+- Tailwind CSS for styling
+- PHPUnit for testing
+- Laravel Pint for code formatting
+
+This structure provides a comprehensive, scalable ERP solution for butcher shop operations with proper separation of concerns, security, and multi-tenancy support.

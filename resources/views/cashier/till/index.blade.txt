@@ -1,0 +1,226 @@
+@extends('layouts.app')
+@section('title', 'Till Session')
+@section('page-title', 'Till Session')
+@section('page-subtitle', 'Manage your cash till')
+@section('sidebar') @include('layouts.sidebars.cashier') @endsection
+
+@section('content')
+
+@if($session)
+{{-- Till is OPEN --}}
+<div class="max-w-2xl">
+
+    {{-- Open status card --}}
+    <div class="bg-white dark:bg-gray-800 rounded-xl border-2
+                border-green-400 dark:border-green-600 p-6 mb-5">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <h2 class="text-lg font-semibold text-gray-800
+                           dark:text-white">
+                    Till is Open
+                </h2>
+                <p class="text-sm text-gray-400">
+                    Opened {{ $session->opened_at->diffForHumans() }}
+                    at {{ $session->opened_at->format('h:i A') }}
+                </p>
+            </div>
+            <span class="px-3 py-1.5 bg-green-100 text-green-700
+                         dark:bg-green-900/30 dark:text-green-400
+                         rounded-full text-sm font-medium">
+                Active
+            </span>
+        </div>
+
+        <div class="grid grid-cols-3 gap-4 mb-5">
+            <div class="bg-gray-50 dark:bg-gray-700/50
+                        rounded-lg p-3 text-center">
+                <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                    Opening float
+                </p>
+                <p class="text-lg font-bold text-gray-800 dark:text-white">
+                    ₦{{ number_format($session->opening_float, 2) }}
+                </p>
+            </div>
+            <div class="bg-gray-50 dark:bg-gray-700/50
+                        rounded-lg p-3 text-center">
+                <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                    Sales today
+                </p>
+                <p class="text-lg font-bold text-green-600">
+                    {{ $session->sales->count() }}
+                </p>
+            </div>
+            <div class="bg-gray-50 dark:bg-gray-700/50
+                        rounded-lg p-3 text-center">
+                <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                    Revenue
+                </p>
+                <p class="text-lg font-bold text-gray-800 dark:text-white">
+                    ₦{{ number_format($session->sales->sum('total_amount'), 2) }}
+                </p>
+            </div>
+        </div>
+
+        <div class="flex gap-3">
+            <a href="{{ route('cashier.dashboard') }}"
+               class="flex-1 text-center py-2.5 bg-bh-red hover:bg-bh-dark
+                      text-white text-sm font-medium rounded-lg
+                      transition-colors">
+                Go to POS
+            </a>
+            <a href="{{ route('cashier.till.close.form') }}"
+               class="flex-1 text-center py-2.5 border border-gray-300
+                      dark:border-gray-600 text-gray-600 dark:text-gray-300
+                      text-sm rounded-lg hover:border-bh-red
+                      hover:text-bh-red transition-colors">
+                Close Till
+            </a>
+        </div>
+    </div>
+
+    {{-- Recent transactions --}}
+    @if($session->sales->count() > 0)
+    <div class="bg-white dark:bg-gray-800 rounded-xl border
+                border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+            <h3 class="text-sm font-semibold text-gray-800 dark:text-white">
+                Today's Transactions
+            </h3>
+        </div>
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="border-b border-gray-100 dark:border-gray-700">
+                    <th class="text-left px-5 py-3 text-xs font-medium
+                               text-gray-500 dark:text-gray-400">Receipt</th>
+                    <th class="text-left px-5 py-3 text-xs font-medium
+                               text-gray-500 dark:text-gray-400">Amount</th>
+                    <th class="text-left px-5 py-3 text-xs font-medium
+                               text-gray-500 dark:text-gray-400">Method</th>
+                    <th class="text-left px-5 py-3 text-xs font-medium
+                               text-gray-500 dark:text-gray-400">Time</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                @foreach($session->sales->take(10) as $sale)
+                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                    <td class="px-5 py-3 font-mono text-xs text-gray-600
+                               dark:text-gray-300">
+                        {{ $sale->receipt_number }}
+                    </td>
+                    <td class="px-5 py-3 font-medium text-gray-800
+                               dark:text-white">
+                        ₦{{ number_format($sale->total_amount, 2) }}
+                    </td>
+                    <td class="px-5 py-3">
+                        <span class="px-2 py-1 bg-gray-100
+                                     dark:bg-gray-700 rounded text-xs
+                                     capitalize text-gray-600
+                                     dark:text-gray-300">
+                            {{ $sale->payment_method }}
+                        </span>
+                    </td>
+                    <td class="px-5 py-3 text-xs text-gray-400">
+                        {{ $sale->created_at->format('h:i A') }}
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+    @endif
+</div>
+
+@else
+{{-- Till is CLOSED — show open form --}}
+<div class="max-w-md">
+    <div class="bg-white dark:bg-gray-800 rounded-xl border
+                border-gray-200 dark:border-gray-700 p-6">
+
+        <div class="text-center mb-6">
+            <div class="text-4xl mb-3">💵</div>
+            <h2 class="text-lg font-semibold text-gray-800
+                       dark:text-white mb-1">
+                Open Your Till
+            </h2>
+            <p class="text-sm text-gray-400">
+                Enter your opening float to start accepting payments
+            </p>
+        </div>
+
+        <form method="POST" action="{{ route('cashier.till.open') }}">
+            @csrf
+
+            @if($errors->any())
+            <div class="bg-red-50 dark:bg-red-900/20 border border-red-200
+                        text-red-700 text-sm rounded-lg px-4 py-3 mb-4">
+                {{ $errors->first() }}
+            </div>
+            @endif
+
+            <div class="mb-5">
+                <label class="block text-sm font-medium text-gray-700
+                              dark:text-gray-300 mb-2">
+                    Opening float (₦)
+                </label>
+                <input type="number" name="opening_float"
+                       step="0.01" min="0"
+                       value="{{ old('opening_float') }}"
+                       required autofocus
+                       class="w-full px-4 py-3 border border-gray-300
+                              dark:border-gray-600 dark:bg-gray-700
+                              dark:text-white rounded-lg text-lg
+                              font-semibold text-center
+                              focus:outline-none focus:ring-2
+                              focus:ring-bh-red"
+                       placeholder="0.00">
+                <p class="text-xs text-gray-400 mt-1 text-center">
+                    This is the cash you are starting with in the till
+                </p>
+            </div>
+
+            <button type="submit"
+                    class="w-full py-3 bg-bh-red hover:bg-bh-dark
+                           text-white font-semibold rounded-lg
+                           transition-colors">
+                Open Till
+            </button>
+        </form>
+    </div>
+
+    {{-- Today's past sessions --}}
+    @if($todaySessions->count() > 0)
+    <div class="mt-5 bg-white dark:bg-gray-800 rounded-xl border
+                border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+            <h3 class="text-sm font-semibold text-gray-800 dark:text-white">
+                Previous sessions today
+            </h3>
+        </div>
+        @foreach($todaySessions as $s)
+        <div class="flex items-center justify-between px-5 py-3
+                    border-b border-gray-100 dark:border-gray-700 last:border-0">
+            <div>
+                <p class="text-sm text-gray-700 dark:text-gray-300">
+                    {{ $s->opened_at->format('h:i A') }}
+                    — {{ $s->closed_at?->format('h:i A') ?? 'Still open' }}
+                </p>
+                <p class="text-xs text-gray-400">
+                    Float: ₦{{ number_format($s->opening_float, 2) }}
+                </p>
+            </div>
+            <span class="text-xs px-2 py-1 rounded-full font-medium
+                {{ $s->status === 'closed'
+                    ? 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400'
+                    : ($s->status === 'flagged'
+                        ? 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400'
+                        : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400') }}">
+                {{ ucfirst($s->status) }}
+            </span>
+        </div>
+        @endforeach
+    </div>
+    @endif
+</div>
+@endif
+
+@endsection
